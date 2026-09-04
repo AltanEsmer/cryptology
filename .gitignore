@@ -1,0 +1,23 @@
+# Local course material and private notes (not for public redistribution).
+*.pdf
+/my notes/
+
+# Local planning history and agent execution records.
+/.superpowers/
+/docs/superpowers/
+
+# Temporary output, Python environments, caches, and OS metadata.
+/tmp/
+/output/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+
+# Credentials and machine-specific configuration.
+.env
+.env.*
+*.pem
+*.key
