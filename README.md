@@ -49,6 +49,10 @@ The solutions refer to *Cryptology - how to crack it*, Lars Ramkilde Knudsen, fi
 
 These are study materials, not an official answer key. Follow your course's collaboration and submission rules.
 
+## Further worked exercises
+
+- [Exercise 2.12: Chinese Remainder Theorem proof and worked example](exercises/exercise-2.12.md)
+
 ## Public repository scope
 
 Source PDFs, lecture slides, private notes, local agent logs, temporary output, and credentials are excluded. Obtain the textbook and course material through authorized sources. The local PDFs are not required to run the code or tests.
