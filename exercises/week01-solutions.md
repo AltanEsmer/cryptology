@@ -1,73 +1,99 @@
-# Week 1 - Chapter 2 Exercises
+# Week 1 worked solutions
 
-Source: the user-supplied `cryptology_essence.pdf`, whose title is *Cryptology - how to crack it*, Lars Ramkilde Knudsen, first edition (2018). The seven statements below were visually checked against PDF page 13, printed page 23. Mathematical notation is transcribed in Markdown/LaTeX; commas in Exercise 2.4 are digit-group separators.
+Start with one exercise. Read the calculation, cover the answer, and repeat the calculation yourself. The optional questions take about a minute each.
 
-**Edition caveat:** These are solutions to the supplied book. Its equivalence to the course's named *Cryptology in Essence* edition has not been confirmed; the exercise-number match alone does not establish course-edition equivalence.
+## Exercise 2.1: Find numbers with GCD 2 and LCM 30
 
-Difficulty/time entries are estimated solving effort, not elapsed time. Verification commands use Python's standard library and should be run from the repository root.
+The **GCD** is the largest number that divides both numbers. The **LCM** is the smallest positive number that both numbers divide.
 
-## Exercise 2.1
+We need $\gcd(a,b)=2$ and $\operatorname{lcm}(a,b)=30$.
 
-**Problem:** Find values of $a$ and $b$ for which $\gcd(a,b)=2$ and $\operatorname{lcm}(a,b)=30$?
+1. Try $a=6$ and $b=10$.
+2. List their divisors. For 6 they are $1,2,3,6$. For 10 they are $1,2,5,10$. The largest shared divisor is **2**.
+3. List their positive multiples until they meet. For 6 they are $6,12,18,24,30$. For 10 they are $10,20,30$. The first shared multiple is **30**.
 
-**Difficulty/time:** Easy, 5–10 minutes.
+So **$a=6$, $b=10$ works**. Check the useful identity $\gcd(a,b)\operatorname{lcm}(a,b)=ab$ with $2\cdot30=6\cdot10=60$.
 
-**Work:** Choose $a=6$ and $b=10$. Their prime factorizations are $6=2\cdot3$ and $10=2\cdot5$. Their only shared prime factor is 2, and the least common multiple contains each prime factor once: $2\cdot3\cdot5=30$.
+<details>
+<summary>Want all the positive answers?</summary>
 
-More generally, for positive integers write $a=2x$, $b=2y$, where $\gcd(x,y)=1$. Since $\gcd(a,b)\operatorname{lcm}(a,b)=ab$, we get $60=4xy$, so $xy=15$. The coprime unordered factor pairs are $(1,15)$ and $(3,5)$.
+Since the GCD is 2, write $a=2x$ and $b=2y$, where $x$ and $y$ share no factor greater than 1. The identity above gives
 
-**Answer:** One solution is $(a,b)=(6,10)$. All positive solutions, up to exchanging $a$ and $b$, are $(2,30)$ and $(6,10)$.
+$$4xy=60,\qquad xy=15.$$
 
-**Verification:** `python3 run_gcd.py 6 10` prints `2`. Independently, $6\cdot10/2=30$, verifying the LCM. Enumerating positive pairs with $a\le b\le30$ using `math.gcd` and `a*b//math.gcd(a,b)` gives exactly `[(2, 30), (6, 10)]`.
+The positive factor pairs of 15 are $(1,15)$ and $(3,5)$. Both have GCD 1. Multiply each entry by 2 to obtain $(2,30)$ and $(6,10)$. Swapping the entries also works.
 
-## Exercise 2.2
+</details>
 
-**Problem:** Assume that $\gcd(a,b)=\operatorname{lcm}(a,b)$. What can be said about $a$ and $b$?
+Try it. Does $(4,15)$ work? Check its GCD first. Answer: no, its GCD is 1.
 
-**Difficulty/time:** Medium, 10–15 minutes.
+## Exercise 2.2: What if the GCD equals the LCM?
 
-**Work:** Under the positive-integer convention, let the common value be $d$. Because $d=\gcd(a,b)$ divides both positive integers, $d\le a$ and $d\le b$. Because $d=\operatorname{lcm}(a,b)$ is a positive multiple of each, $a\le d$ and $b\le d$. Thus $a=d=b$.
+For positive numbers, the GCD cannot be larger than either number. The LCM cannot be smaller than either number.
 
-**Answer:** For positive integers, $a=b$; conversely, every positive pair with $a=b$ satisfies the equality. If signed, nonzero integers are allowed with nonnegative GCD and LCM, the conclusion is $|a|=|b|$, not necessarily $a=b$. With the convention $\operatorname{lcm}(0,n)=0$ and $\gcd(0,0)=0$, the pair $(0,0)$ also satisfies it, but a pair with exactly one zero does not.
+For example, with 6 and 10, the GCD is 2 and the LCM is 30. Those values sit on opposite sides of both numbers.
 
-**Verification:** Conversely, if $a=b=c>0$, both the GCD and LCM equal $c$, proving sufficiency as well as necessity. For the signed caveat, $a=2,b=-2$ gives GCD = LCM = 2 although $a\ne b$.
+1. Call the shared GCD and LCM $d$.
+2. Because $d$ divides $a$, we have $d\le a$. Because $a$ divides $d$, we also have $a\le d$.
+3. Together these give $d\le a\le d$, so $a=d$.
+4. Apply the same steps to $b$. Then $b=d$ too.
 
-## Exercise 2.3
+Therefore **$a=b$**. This also works in reverse. If $a=b=8$, both the GCD and LCM are 8. The same holds for any positive value.
 
-**Problem:** Assume $p$ is an integer greater than 1, and assume that none of the primes less than $p$ divides $p$. Then $p$ itself is a prime.
+Try it. What are the GCD and LCM of 12 and 12? Answer: both are 12.
 
-1. Is 3 a prime?
-2. Is $13^{13}$ a prime?
-3. Is $13^{13}+1$ a prime?
+<details>
+<summary>If zero or negative inputs are allowed</summary>
 
-**Difficulty/time:** Easy, 5–10 minutes.
+The main answer uses positive integers. With signed nonzero integers and nonnegative GCD and LCM, the conclusion is $|a|=|b|$. For example, 2 and $-2$ have GCD and LCM 2. Under the conventions $\gcd(0,0)=0$ and $\operatorname{lcm}(0,n)=0$, the pair $(0,0)$ works too. A pair with exactly one zero does not.
 
-**Work:**
+</details>
 
-1. The only prime smaller than 3 is 2, which does not divide 3. Hence 3 is prime.
-2. $13^{13}=13\cdot13^{12}$, a product of two integers greater than 1, so it is composite.
-3. An odd number to a positive integer power is odd. Thus $13^{13}+1$ is even and greater than 2, so it is composite.
+## Exercise 2.3: Which of these numbers are prime?
 
-**Answer:** Respectively: yes, no, no.
+A prime is an integer greater than 1 whose only positive divisors are 1 and itself. One factor between those two is enough to prove that a number is composite.
 
-**Verification:** The positive divisors of 3 are exactly 1 and 3. Numerically, $13^{13}=302875106592253$, which is divisible by 13, and $13^{13}+1=302875106592254=2\cdot151437553296127$. These explicit nontrivial factors check the two composite claims.
+### 1. Is 31 prime?
 
-## Exercise 2.4
+1. Only test primes up to $\sqrt{31}\approx5.57$. These are 2, 3, and 5.
+2. Division by 2 leaves remainder 1, since $31=2\cdot15+1$.
+3. Division by 3 leaves remainder 1, since $31=3\cdot10+1$.
+4. Division by 5 leaves remainder 1, since $31=5\cdot6+1$.
 
-**Problem:** Which of the following integers (decimal notation) are primes?
+None divides 31, so **31 is prime**.
 
-111; 1,111; 111,111; 11,111,111; 111,111,111; 1,111,111,111; 111,111,111,111.
+Why stop at the square root? If $31=ab$ with both factors greater than 1, at least one factor must be at most $\sqrt{31}$. Otherwise $ab>31$. That smaller factor would have a prime divisor among 2, 3, and 5.
 
-**Difficulty/time:** Medium, 10–15 minutes.
+### 2. Is $13^{13}$ prime?
 
-**Work:** A decimal integer is divisible by 3 when its digit sum is divisible by 3, because $10\equiv1\pmod3$. This covers repunits of lengths 3, 6, 9, and 12. For each remaining length (4, 8, 10), the length is even: since $10\equiv-1\pmod{11}$, the alternating sum of the digits is zero, giving divisibility by 11. Each number is greater than its exhibited divisor.
+Write the power as a product:
 
-**Answer:** None of the seven integers is prime.
+$$13^{13}=13\cdot13^{12}.$$
 
-**Verification:** Explicit factorizations provide a direct check of every entry; the cofactors need not themselves be prime.
+Both factors exceed 1. Therefore **$13^{13}$ is composite**. No large calculation is needed.
 
-| Integer | Nontrivial factorization |
-|---|---|
+### 3. Is $13^{13}+1$ prime?
+
+1. 13 is odd. Multiplying odd numbers gives an odd number, so $13^{13}$ is odd.
+2. Add 1 to get an even number greater than 2.
+3. Therefore 2 is a nontrivial divisor.
+
+So **$13^{13}+1$ is composite**. A numerical check is
+
+$$302875106592254=2\cdot151437553296127.$$
+
+Try it. Is $7^5+1$ prime? Answer: no, it is even and greater than 2.
+
+## Exercise 2.4: Are these numbers made of ones prime?
+
+Check a small divisor before trying to factor a large number completely.
+
+1. Add the digits. For 111 the sum is 3, so 3 divides it. The same rule covers the numbers with 6, 9, or 12 ones.
+2. For the remaining numbers, group the digits in pairs. For example, $1111=11\cdot101$. Every listed number with an even number of ones is divisible by 11.
+3. Exhibit one factorization for each number.
+
+| Number from the exercise | Factorization |
+| --- | --- |
 | 111 | $3\cdot37$ |
 | 1,111 | $11\cdot101$ |
 | 111,111 | $3\cdot37,037$ |
@@ -76,63 +102,128 @@ More generally, for positive integers write $a=2x$, $b=2y$, where $\gcd(x,y)=1$.
 | 1,111,111,111 | $11\cdot101,010,101$ |
 | 111,111,111,111 | $3\cdot37,037,037,037$ |
 
-## Exercise 2.5
+**None of the seven numbers is prime.** Every row expresses the number as two integers greater than 1. The factors do not need to be prime themselves.
 
-**Problem:** Let $p_1,p_2,p_3,\ldots$ be the list of primes in ascending order, that is, $p_1=2,p_2=3,p_3=5$ etc.
+Try it. Why is 111,111 divisible by both 3 and 11? Answer: its digit sum is 6, and $111111=11\cdot10101$.
 
-1. Is $p_1\cdot p_2\cdot\ldots\cdot p_{i-1}\cdot p_i+1$ a prime for all values of $i$? If yes, argue why this is the case. If no, show a counter example.
+## Exercise 2.5: Does multiplying the first primes and adding 1 always give a prime?
 
-**Difficulty/time:** Medium, 10–20 minutes.
+The first few attempts work:
 
-**Work:** Take $i=6$, so the first six primes are $2,3,5,7,11,13$. Then
+$$2+1=3,\qquad2\cdot3+1=7,\qquad2\cdot3\cdot5+1=31.$$
 
-$$2\cdot3\cdot5\cdot7\cdot11\cdot13+1=30030+1=30031=59\cdot509.$$
+But a few successful examples do not prove that the rule always works. One failed example disproves it.
 
-Both factors exceed 1, so the result is composite. The construction guarantees only that none of the first $i$ primes divides the result: division by any of them leaves remainder 1. It does not exclude products of larger primes.
+1. Take the first six primes, $2,3,5,7,11,13$.
+2. Multiply them in steps: $2\cdot3=6$, $6\cdot5=30$, $30\cdot7=210$, $210\cdot11=2310$, $2310\cdot13=30030$.
+3. Add 1 to get 30031.
+4. Factor the result: $30031=59\cdot509$.
 
-**Answer:** No. The counterexample $i=6$ gives $30031=59\cdot509$.
+So **no, the result is not always prime**. The counterexample uses $i=6$.
 
-**Verification:** Direct multiplication yields $59\cdot509=59(500+9)=29500+531=30031$. Also $30031-1=30030$ is exactly the product of the first six primes.
+Check the multiplication with $59\cdot509=59\cdot500+59\cdot9=29500+531=30031$.
 
-## Exercise 2.6
+The construction does guarantee something useful. Dividing the product-plus-one by any prime in the original product leaves remainder 1. New prime factors can still divide it, as 59 and 509 do here.
 
-**Problem:**
+Try it. What remainder does 30031 leave when divided by 13? Answer: 1, because $30030=13\cdot2310$.
 
-1. Find $34^4+17^9\bmod16$.
-2. Find $(701+55)^{98235411111}\bmod7$.
+## Exercise 2.6: Find remainders without huge powers
 
-**Difficulty/time:** Easy, 5–10 minutes.
+“Modulo $m$” means “keep the remainder after division by $m$.” You can replace bases by their remainders before calculating powers.
 
-**Work:** Interpret the first expression as the residue of the whole sum.
+### 1. Find $(34^4+17^9)\bmod16$
 
-1. Reduce the bases: $34\equiv2\pmod{16}$ and $17\equiv1\pmod{16}$. Therefore $34^4+17^9\equiv2^4+1^9=17\equiv1\pmod{16}$.
-2. $701+55=756=7\cdot108\equiv0\pmod7$. The exponent $98235411111$ is positive, so raising this multiple of 7 to that power still gives a multiple of 7.
+1. $34=2\cdot16+2$, so replace 34 with 2.
+2. $17=1\cdot16+1$, so replace 17 with 1.
+3. Calculate $2^4+1^9=16+1=17$.
+4. Divide 17 by 16. The remainder is **1**.
 
-**Answer:** The least nonnegative residues are (1) 1 and (2) 0.
+In symbols,
 
-**Verification:** `python3 -c 'print((34**4 + 17**9) % 16); print(pow(701 + 55, 98235411111, 7))'` prints `1` followed by `0`. Three-argument `pow` computes the second residue without constructing the enormous integer power.
+$$34^4+17^9\equiv2^4+1^9\equiv17\equiv1\pmod{16}.$$
 
-## Exercise 2.7
+### 2. Find $(701+55)^{98235411111}\bmod7$
 
-**Problem:** Find the multiplicative inverse of 8 modulo 71.
+1. Add the base: $701+55=756$.
+2. Divide by 7: $756=7\cdot108$, so the remainder is 0.
+3. A positive power of a multiple of 7 is still a multiple of 7.
 
-**Difficulty/time:** Easy, 5–10 minutes.
+The remainder is **0**. The enormous exponent does not change that answer.
 
-**Work:** Apply Euclid's algorithm:
+Try it. Find $18^5\bmod17$. Answer: $18\equiv1\pmod{17}$, so the remainder is 1.
 
-$$71=8\cdot8+7,\qquad8=1\cdot7+1,\qquad7=7\cdot1+0.$$
+## Exercise 2.7: Find the inverse of 8 modulo 71
 
-Thus $\gcd(8,71)=1$, so an inverse exists. Back-substitution gives
+We want a number $x$ such that multiplying it by 8 leaves remainder 1 after division by 71. In symbols, $8x\equiv1\pmod{71}$.
 
-$$1=8-7=8-(71-8\cdot8)=9\cdot8-71.$$
+1. Try 9. Then $8\cdot9=72$.
+2. Since $72=71+1$, the remainder is 1.
 
-Reducing modulo 71 gives $9\cdot8\equiv1\pmod{71}$.
+Therefore **the inverse is 9**.
 
-**Answer:** $8^{-1}\equiv9\pmod{71}$. The least nonnegative representative is 9; all integer representatives are $9+71k$ for $k\in\mathbb Z$.
+For larger numbers, use Euclid's algorithm to find the answer without guessing:
 
-**Verification:** $8\cdot9=72=71+1$, so the remainder is 1. Each Euclidean line also has a valid remainder: $0\le7<8$, $0\le1<7$, and $0\le0<1$.
+$$71=8\cdot8+7,$$
+$$8=1\cdot7+1,$$
+$$7=7\cdot1+0.$$
 
-The following reproducible standard-library check covers the numerical claims across all seven exercises (successful execution prints `All arithmetic checks passed.`):
+The last nonzero remainder is 1, so the GCD is 1 and an inverse exists. Work backward from the line containing 1:
+
+$$1=8-7.$$
+
+The first line says $7=71-8\cdot8$. Substitute it:
+
+$$1=8-(71-8\cdot8)=9\cdot8-71.$$
+
+The coefficient of 8 is 9, our inverse. Adding any multiple of 71 gives another representative of the same inverse, so all integer answers are $9+71k$.
+
+Try it. Is 80 also an inverse? Answer: yes, $80=9+71$ and $8\cdot80=640=9\cdot71+1$.
+
+## Run the week 1 GCD implementation
+
+From the repository root, run:
+
+```bash
+python3 run_gcd.py 48 18
+```
+
+The output is `6`. Here is what the loop in [number_theory.py](../crypto_library/number_theory.py) does:
+
+| Current pair $(a,b)$ | Division | Next pair $(b,a\bmod b)$ |
+| --- | --- | --- |
+| $(48,18)$ | $48=2\cdot18+12$ | $(18,12)$ |
+| $(18,12)$ | $18=1\cdot12+6$ | $(12,6)$ |
+| $(12,6)$ | $12=2\cdot6+0$ | $(6,0)$ |
+
+Stop when the second value is zero. The first value, 6, is the GCD.
+
+Why can we replace the pair? If a number divides both $a$ and $b$, it also divides the remainder $a-qb$. Conversely, a number dividing $b$ and that remainder divides $a=qb+r$. The common divisors stay the same, and the remainders get smaller until the loop stops. The implementation first takes absolute values so negative inputs work too. A zero input returns the absolute value of the other input, including 0 for `(0, 0)`.
+
+Python's integers also support the course's 100-to-500-bit inputs. No extra number library is needed. Try large inputs with a known GCD:
+
+```bash
+python3 - <<'PY'
+from crypto_library.number_theory import gcd
+
+factor = 2**498 - 1
+a, b = 2 * factor, 3 * factor
+print(a.bit_length(), b.bit_length())
+print(gcd(a, b) == factor)
+PY
+```
+
+Expected output:
+
+```text
+499 500
+True
+```
+
+The inputs are 499 and 500 bits long. The shared factor is the GCD because 2 and 3 share no divisor greater than 1. A bit is one binary digit, so bit length measures the size of the integer, not the number of decimal digits.
+
+## Check the arithmetic yourself
+
+Copy this block into a terminal at the repository root. It checks the numerical answers using only Python's standard library.
 
 ```bash
 python3 - <<'PY'
@@ -144,7 +235,8 @@ assert pairs == [(2, 30), (6, 10)]
 for a in range(1, 31):
     for b in range(1, 31):
         assert (math.gcd(a, b) == a * b // math.gcd(a, b)) == (a == b)
-assert [d for d in range(1, 4) if 3 % d == 0] == [1, 3]
+assert [d for d in range(1, 32) if 31 % d == 0] == [1, 31]
+assert all(31 % p == 1 for p in (2, 3, 5))
 assert 13**13 == 302875106592253
 assert 13**13 % 13 == 0
 assert 13**13 + 1 == 2 * 151437553296127
@@ -158,11 +250,16 @@ assert math.prod([2, 3, 5, 7, 11, 13]) + 1 == 59 * 509 == 30031
 assert (34**4 + 17**9) % 16 == 1
 assert pow(701 + 55, 98235411111, 7) == 0
 for a, q, b, r in [(71, 8, 8, 7), (8, 1, 7, 1), (7, 7, 1, 0)]:
-    assert a == q * b + r and 0 <= r < abs(b)
-assert 8 % 1 == 0 and 71 % 1 == 0
+    assert a == q * b + r and 0 <= r < b
 assert 9 * 8 - 71 == 1 and (8 * 9) % 71 == 1
 print('All arithmetic checks passed.')
 PY
 ```
 
-The finite check for Exercise 2.2 is a sanity check only; its general proof is the divisibility argument above.
+The finite check for Exercise 2.2 is a sanity check. The argument in that solution proves the result for every positive pair. Three-argument `pow(base, exponent, modulus)` finds a remainder without storing the enormous power.
+
+## Source notes
+
+These solutions use Lars Ramkilde Knudsen's *Cryptology - how to crack it*, first edition, 2018, Chapter 2, printed page 23. All seven exercises were visually checked against PDF page 13 of the supplied `cryptology_essence.pdf`. Exercise 2.3 asks about **31**, correcting the previous transcription of 3. Commas in Exercise 2.4 group decimal digits. Exercise 2.6 takes the remainder of the whole first sum.
+
+The course calls its book *Cryptology in Essence*. Equivalence with that named edition remains unconfirmed. The solutions follow the supplied book's actual statements. Source PDFs remain outside this public repository.

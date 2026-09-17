@@ -1,58 +1,73 @@
 # Cryptology
 
-Cryptology coursework: small, tested Python implementations and worked mathematical exercises, organized by topic and week.
+Worked course exercises and small Python implementations. The solutions use short calculations, explain why each step works, and finish with a check.
 
-## Project structure
+## Start studying
 
-```text
-crypto_library/                 Reusable algorithms
-    __init__.py
-    number_theory.py            Euclid's GCD algorithm
-tests/                         Unit and command-line tests
-    test_number_theory.py
-    test_run_gcd.py
-exercises/                     Weekly worked solutions
-    week01-solutions.md
-docs/                          Study plans and verification notes
-    week01-plan.md
-run_gcd.py                     GCD command-line entry point
-```
+| Week | Worked solutions | Code to try |
+|---|---|---|
+| 1 | [Exercises 2.1–2.7](exercises/week01-solutions.md) | GCD and Python's large integers |
+| 2 | [Exercises 2.8–2.12](exercises/week02-solutions.md) | Modular inverse, Euler's phi, Chinese Remainder Theorem |
+| 3 | [Exercises 3.1, 3.3, 3.5, 3.6, and 3.8](exercises/week03-solutions.md) | [AES-128 walkthrough with 2–10 rounds](docs/aes-walkthrough.md) |
 
-Keep future reusable algorithms in `crypto_library/`, corresponding tests in `tests/`, and weekly work in `exercises/weekNN-solutions.md` and `docs/weekNN-plan.md`.
+Try one exercise at a time. Follow the worked steps, hide the answer, and repeat the calculation yourself.
 
-## Quick start
+The assignment lists come from the local Fall 2026 week sheets. The textbook questions were visually checked in Lars Ramkilde Knudsen's *Cryptology - how to crack it*, first edition, 2018, stored locally as `cryptology_essence.pdf`. The course names *Cryptology in Essence*; equivalence between editions is unconfirmed. Each solution file identifies its printed and PDF pages.
 
-Requires Python 3.9 or newer. No third-party dependencies or installation step are needed. Run commands from the project root.
+Week 1 corrects an earlier transcription error. Exercise 2.3 asks whether **31** is prime.
 
-Run the tests:
+## Run the examples
 
-```bash
-python3 -m unittest discover -s tests -v
-```
-
-Compute a GCD:
+Use Python 3.9 or newer from the repository root. No installation or third-party packages are needed.
 
 ```bash
 python3 run_gcd.py 48 18
 ```
 
-Expected output: `6`. Use `python3 run_gcd.py --help` for usage.
+This prints `6`.
 
-The implementation accepts arbitrary-precision integers, normalizes negative inputs, and returns a nonnegative result. It defines `gcd(0, 0)` as `0`. Tests include 500-bit arithmetic and comparisons against Python's `math.gcd`.
+```bash
+python3 - <<'PY'
+from crypto_library.number_theory import modular_inverse, euler_phi, chinese_remainder
 
-## Week 1
+print(modular_inverse(357, 1234))
+print(euler_phi(491401))
+print(chinese_remainder([5, 8], [7, 11]))
+PY
+```
 
-- [Worked solutions for exercises 2.1-2.7](exercises/week01-solutions.md)
-- [Study plan, difficulty ratings, and verification](docs/week01-plan.md)
+This prints `1075`, `490700`, and `19` on separate lines.
 
-The solutions refer to *Cryptology - how to crack it*, Lars Ramkilde Knudsen, first edition (2018), printed page 23. Equivalence to the course's named *Cryptology in Essence* edition has not been confirmed; check the assigned questions before relying on the numbering.
+Encrypt one 16-byte block with AES-128:
 
-These are study materials, not an official answer key. Follow your course's collaboration and submission rules.
+```bash
+python3 run_aes.py 6bc1bee22e409f96e93d7e117393172a 2b7e151628aed2a6abf7158809cf4f3c
+```
 
-## Further worked exercises
+This prints `3ad77bb40d7a3660a89ecaf32466ef97`.
 
-- [Exercise 2.12: Chinese Remainder Theorem proof and worked example](exercises/exercise-2.12.md)
+Add `--rounds 2` to experiment with two rounds. The implementation always starts with AddRoundKey and omits MixColumns in its selected final round. Only the 10-round setting is standard AES-128. The implementation is for learning, not protecting real data.
+
+## Check your work
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+The tests compare number theory with Python's arithmetic and direct counting, check AES against published NIST vectors, cover every supported reduced-round count, and exercise the command-line programs.
+
+- [Week 1 study plan](docs/week01-plan.md) has short practice sessions and checks.
+- [Exercise 2.12 in more detail](exercises/exercise-2.12.md) includes another CRT derivation.
+- [Verification notes](docs/weeks01-03-verification.md) record the source checks, commands, and limitations.
+
+## Project structure
+
+- `crypto_library/` contains the reusable algorithms.
+- `run_gcd.py` and `run_aes.py` provide command-line examples.
+- `tests/` contains standard-library `unittest` checks.
+- `exercises/` contains the weekly solutions.
+- `docs/` contains study guidance and verification notes.
 
 ## Public repository scope
 
-Source PDFs, lecture slides, private notes, local agent logs, temporary output, and credentials are excluded. Obtain the textbook and course material through authorized sources. The local PDFs are not required to run the code or tests.
+Source PDFs, lecture slides, private notes, local execution logs, temporary output, and credentials are excluded. Obtain the course material through authorized sources. No local PDFs are needed to run the code or tests.
